@@ -1,0 +1,35 @@
+sequenceDiagram
+    participant Przeglądarka
+    participant Serwer
+
+    Note right of Przeglądarka: Użytkownik pisze notatkę w inpucie i klika przycisk "save"
+
+    Przeglądarka->>Serwer: POST https://studies.cs.helsinki.fi/exampleapp/new_note
+    activate Serwer
+    Note left of Serwer: Serwer przetwarza zapytanie i zapisuje notkatkę
+    Serwer-->>Przeglądarka: Odpowiedź (302) do adresu /notes
+    deactivate Serwer
+
+    Przeglądarka->>Serwer: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate Serwer
+    Serwer-->>Przeglądarka: Dokument HTML
+    deactivate Serwer
+
+    Przeglądarka->>Serwer: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate Serwer
+    Serwer-->>Przeglądarka: Plik CSS
+    deactivate Serwer
+
+    Przeglądarka->>Serwer: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate Serwer
+    Serwer-->>Przeglądarka: Plik JavaScript
+    deactivate Serwer
+
+    Note right of Przeglądarka: Skrypt JavaScript pobiera zaktualizowane notatki
+    
+    Przeglądarka->>Serwer: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate Serwer
+    Serwer-->>Przeglądarka: Zaktualizowanie pliku JSON który zawiera nową notatkę
+    deactivate Serwer
+
+    Note right of Przeglądarka: Funkcja JavaScript odwołuje się i renderuje zaktualizowaną listę notatek

@@ -1,0 +1,25 @@
+sequenceDiagram
+    participant Przegladarka
+    participant Serwer
+    
+    Przegladarka ->> Serwer: GET spa
+    activate Serwer
+    Serwer -->> Przegladarka: Zwraca dokument HTML (200) OK
+    deactivate Serwer
+    Przegladarka ->> Serwer: GET main.css (200) OK
+    activate Serwer
+    Serwer -->> Przegladarka: Zwraca plik main.css (200) OK
+    deactivate Serwer
+    Przegladarka ->> Serwer: GET spa.js (200) OK
+    activate Serwer
+    Serwer -->> Przegladarka: Zwraca skrypt spa.js (200) OK
+    deactivate Serwer
+    Przegladarka ->> Serwer: GET data.json (200) OK
+    activate Serwer
+    Serwer -->> Przegladarka: Zwraca dokment z danymi data.json (200) OK
+    deactivate Serwer
+    Note right of Przegladarka: Przeglądarka uruchamia kod JavaScript z pliku spa.js
+    Note right of Przegladarka: Skrypt wysyła żądanie GET po dane notatek (np. data.json).
+    Note right of Przegladarka: Serwer zwraca dane notatek w formacie JSON (status 200 OK).
+    Note right of Przegladarka: JavaScript parsuje dane JSON, skrypt tworzy elementy HTML dla każdej notatki.
+    Note right of Przegladarka: Przeglądarka dodaje te elementy do DOM — renderuje listę notatek.

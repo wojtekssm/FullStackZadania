@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant Przegladarka
+    participant Serwer
+    Note right of Przegladarka: Użytkownik pisze notatkę w inpucie i klika przycisk "save"
+    Przegladarka ->> Serwer: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate Serwer
+    Note left of Serwer: Serwer odbiera żądanie POST z danymi notatki w formacie JSON, parsuje dane i dodaje notatkę do swojej pamięci (np. listy notatek).
+    Serwer -->> Przegladarka: Odpowiedź (201) Created
+    deactivate Serwer
+    Note right of Przegladarka: Przeglądarka aktualizuje widok listy za pomocą skryptu JavaScript strona nie jest przeładowywana
