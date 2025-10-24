@@ -6,8 +6,8 @@ const Header = (props) => {
 }
 
 const Part = ({ part, exercises}) => {
-  return <p>{part} {exercises}</p>;
-};
+  return <p>{part} {exercises}</p>
+}
 
 const Content = (props) => {
   return (
