@@ -1,7 +1,8 @@
 const Header = (props) => {
     return(
-        <h1>lol</h1>
+        console.log(props),
+        <h1>{props.course}</h1>
     )
 }
 
-  export default Header
+export default Header
