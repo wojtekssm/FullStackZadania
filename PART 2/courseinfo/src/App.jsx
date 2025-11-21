@@ -1,10 +1,5 @@
 import Course from "./components/Course"
-const Header = (props) => {
-    return(
-        console.log(props),
-        <h1>{props.course}</h1>
-    )
-}
+
 
 const Part = ({ part, exercises}) => {
   return <p>{part} {exercises}</p>
@@ -44,9 +39,8 @@ const App = () => {
 
   return (
     <div>
-      <Header course={course} />
       <Content parts={parts} />
-      <Course course={course} parts={parts}/>
+      <Course /* course={course} parts={parts} *//>
     </div>
   )
 }

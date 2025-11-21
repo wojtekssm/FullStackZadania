@@ -1,5 +1,7 @@
-import Total from "./Total"
-const Course = ({parts, course}) =>{
-    <Total parts={parts} />
+
+const Course = () =>{
+    <div>
+    gówno
+    </div>
 }
 export default Course
