@@ -1,17 +1,23 @@
+import personService from '../services/persons'
+
 const Persons = ({persons, newFilter}) =>{
+  const deletePerson = (person) => {
+    if(window.confirm(`Delete ${person.name}?`)){
+      personService.deleteFrom(person.id)
+    }
+  }
     if(newFilter.length < 1){
       return(
       persons.map(person =>
-        <p key={person.id}>{person.name} {person.number}</p>
+        <p key={person.id}>{person.name} {person.number} <button onClick={() => deletePerson(person)}>delete</button></p>
       )
     )
     }else{
       return(
         persons.map(person => person.name.toLowerCase().includes(newFilter.toLowerCase()) ?
-        <p key={person.id}>{person.name} {person.number}</p>: null
+        <p key={person.id}>{person.name} {person.number} <button onClick={() => deletePerson(person)}>delete</button></p>: null
       )
       )
     }
   }
-
   export default Persons
