@@ -33,8 +33,8 @@ const App = () => {
     copy[selected] += 1
     setVotes(copy)
   }
-  const maxValue = Math.max(...Object.values(votes));
-  const maxKey = Object.keys(votes).find(key => votes[key] === maxValue);
+  const maxValue = Math.max(...Object.values(votes))
+  const maxKey = Object.keys(votes).find(key => votes[key] === maxValue)
   return (
     <div>
       <h1>Anecdote of the day</h1>

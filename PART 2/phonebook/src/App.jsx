@@ -15,25 +15,37 @@ useEffect(() => {
       })
   }, [])
 
-  const addPerson = (event) => {
-    event.preventDefault()
-    const personObject = {name: newName, number: newNumber, id:persons.length+1}
-    const ifContains = (persons, personObject) => {
-      return persons.some(p => p.name === personObject.name && p.number === personObject.number)
-    }
-    
-    if(!ifContains(persons, personObject)){
-      setPersons(persons.concat(personObject))
+const addPerson = (event) => {
+  event.preventDefault()
+  const personObject = { name: newName, number: newNumber }
+
+  const ifContains = (persons, name) => {
+    return persons.some(p => p.name === personObject.name)
+  }
+
+  if (!ifContains(persons, personObject.name)) {
+    personService.create(personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(error => {
+        console.error("Error adding person:", error)
+      })
+  } else {
+    if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+      const foundPerson = persons.find(p => p.name === personObject.name)
+      personService.update(foundPerson.id, personObject).then(response => {
+      setPersons(persons.map(p => 
+        p.id !== foundPerson.id ? p : response.data
+      ))
       setNewName('')
       setNewNumber('')
-      personService.create(personObject).then(response=>{
-        console.log(response);
-      })
-    }
-    else{
-      alert(`${newName} is already added to phonebook`)
+    })
     }
   }
+}
 
   const handleChangeName= (event) =>{
     setNewName(event.target.value)
@@ -52,7 +64,7 @@ useEffect(() => {
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handleChangeName={handleChangeName} newNumber={newNumber} handleChangeNumber={handleChangeNumber}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} newFilter={newFilter}/>
+      <Persons persons={persons} newFilter={newFilter} setPersons={setPersons}/>
     </div>
     
   )
