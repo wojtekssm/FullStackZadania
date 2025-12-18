@@ -4,11 +4,21 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 
+
+const Message = ({person}) =>{
+  if(person != undefined){
+    return(
+      <p>Added {person}</p>
+    )
+  }
+}
+let lastPerson;
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+
 useEffect(() => {
     personService.getAll().then(response => {
         setPersons(response.data)
@@ -29,6 +39,7 @@ const addPerson = (event) => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
+        lastPerson = personObject.name
       })
       .catch(error => {
         console.error("Error adding person:", error)
@@ -60,6 +71,7 @@ const addPerson = (event) => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message person={lastPerson}/>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handleChangeName={handleChangeName} newNumber={newNumber} handleChangeNumber={handleChangeNumber}/>
