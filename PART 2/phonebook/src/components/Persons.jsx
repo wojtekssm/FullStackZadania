@@ -1,13 +1,4 @@
-import personService from '../services/persons'
-
-const Persons = ({persons, newFilter, setPersons}) =>{
-  const deletePerson = (person) => {
-    if(window.confirm(`Delete ${person.name}?`)){
-      personService.deleteFrom(person.id).then(() => {
-        setPersons(persons.filter(p => p.id !== person.id))
-    })
-  }
-}
+const Persons = ({persons, newFilter, setPersons, deletePerson}) =>{
     if(newFilter.length < 1){
       return(
       persons.map(person =>

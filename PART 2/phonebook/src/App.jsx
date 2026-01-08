@@ -3,21 +3,14 @@ import personService from './services/persons'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
-
-const Message = ({person}) =>{
-  if(person != undefined){
-    return(
-      <p>Added {person}</p>
-    )
-  }
-}
-let lastPerson;
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
 useEffect(() => {
     personService.getAll().then(response => {
@@ -39,7 +32,15 @@ const addPerson = (event) => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
-        lastPerson = personObject.name
+        setErrorMessage(
+          {
+            text: `Added ${personObject.name}`,
+            type: "message"
+          }
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
       .catch(error => {
         console.error("Error adding person:", error)
@@ -54,8 +55,33 @@ const addPerson = (event) => {
       setNewName('')
       setNewNumber('')
     })
+    setErrorMessage({
+      text: `Replaced number of ${foundPerson.name}`,
+      type: "message"
+    })
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
     }
   }
+}
+
+const deletePerson = (person) => {
+  if(window.confirm(`Delete ${person.name}?`)){
+    personService.deleteFrom(person.id).then(() => {
+      setPersons(persons.filter(p => p.id !== person.id))
+  }).catch(error =>{
+    setErrorMessage(
+      {
+        text: `Information of ${person.name} has been already been removed from server`,
+        type: "error"
+      }
+    )
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  })
+}
 }
 
   const handleChangeName= (event) =>{
@@ -71,12 +97,12 @@ const addPerson = (event) => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Message person={lastPerson}/>
+      <Notification message={errorMessage} />
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handleChangeName={handleChangeName} newNumber={newNumber} handleChangeNumber={handleChangeNumber}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} newFilter={newFilter} setPersons={setPersons}/>
+      <Persons persons={persons} newFilter={newFilter} setPersons={setPersons} deletePerson={deletePerson}/>
     </div>
     
   )
