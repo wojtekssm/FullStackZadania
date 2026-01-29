@@ -1,31 +1,15 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
-const App = () => {
-  const [value, setValue] = useState("")
-  const [countries, setCountries] = useState([])
-  const [selectedCountry, setSelectedCountry] = useState(null)
-
-  useEffect(() => {
-    axios
-      .get("https://studies.cs.helsinki.fi/restcountries/api/all")
-      .then(response => setCountries(response.data))
-    const apiKey = "510a070949503c340f8e128615278680";
-
-axios.get(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${apiKey}`)
-  .then(res => console.log(res.data));
-
-  }, [])
-
-  const handleChange = (event) => {
-    setValue(event.target.value)
-    setSelectedCountry(null)
-  }
-
-  const Countries = ({ countries, value, selectedCountry, setSelectedCountry }) => {
+const Countries = ({ countries, value, selectedCountry, setSelectedCountry, weather, setWeather}) => {
   const filtered = countries.filter(c =>
     c.name.common.toLowerCase().includes(value.toLowerCase())
   )
+useEffect(() => {
+  const apiKey = "510a070949503c340f8e128615278680";
+  if (selectedCountry){
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${selectedCountry.capital}&appid=${apiKey}&units=metric`).then(res => setWeather(res.data)) 
+  }
+  }, [selectedCountry])
 
   if (selectedCountry) {
     const country = selectedCountry
@@ -43,6 +27,11 @@ axios.get(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${apiK
         </ul>
 
         <img src={country.flags.png} alt={`Flag of ${country.name.common}`} />
+        <h2>Weather in {country.capital}</h2>
+        <p>Temperature {weather?.main?.temp} Celsius</p>
+        <img src={`https://openweathermap.org/img/w/${weather?.weather?.[0]?.icon}.png`} alt={`${weather?.weather?.[0]?.main}`} />
+        <p>Wind {weather?.wind?.speed} m/s</p>
+        {console.log(weather)}
       </div>
     )
   }
@@ -67,15 +56,36 @@ axios.get(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${apiK
     </div>
   )
 }
+const App = () => {
+  const [value, setValue] = useState("")
+  const [countries, setCountries] = useState([])
+  const [weather, setWeather] = useState(null)
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
+  useEffect(() => {
+    axios
+      .get("https://studies.cs.helsinki.fi/restcountries/api/all")
+      .then(response => setCountries(response.data))
+
+  }, [])
+
+  const handleChange = (event) => {
+    setValue(event.target.value)
+    setSelectedCountry(null)
+  }
+
+  
   return (
     <div>
+      
       find countries <input value={value} onChange={handleChange} />
       <Countries
         countries={countries}
         value={value}
         selectedCountry={selectedCountry}
         setSelectedCountry={setSelectedCountry}
+        weather={weather}
+        setWeather={setWeather}
       />
     </div>
   )
