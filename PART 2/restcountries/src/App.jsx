@@ -5,7 +5,7 @@ const Countries = ({ countries, value, selectedCountry, setSelectedCountry, weat
     c.name.common.toLowerCase().includes(value.toLowerCase())
   )
 useEffect(() => {
-  const apiKey = "";
+  const apiKey = import.meta.env.VITE_SOME_KEY
   if (selectedCountry){
     axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${selectedCountry.capital}&appid=${apiKey}&units=metric`).then(res => setWeather(res.data)) 
   }
