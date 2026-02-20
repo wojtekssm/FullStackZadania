@@ -21,6 +21,11 @@ let persons = [
       "id": "4",
       "name": "Mary Poppendieck", 
       "number": "39-23-6423122"
+    },
+    { 
+      "id": "5",
+      "name": "Wojtek M", 
+      "number": "123"
     }
 ]
 
@@ -61,16 +66,37 @@ const generateId = () => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if (!body.content) {
+  if (!body.name) {
     return response.status(400).json({
-      error: 'content missing',
+      error: 'name missing',
     })
   }
 
-  const person = {
-    content: body.content,
-    important: body.important || false,
+  else if(!body.number){
+    return response.status(400).json({
+      error: 'number missing',
+    })
+  }
+
+  const nameExist = persons.some(person => person.name === body.name)
+  const numberExist = persons.some(person => person.number === body.number)
+
+  if(nameExist){
+    return response.status(400).json({
+      error: 'name must be unique',
+    })
+  }
+  else if(numberExist){
+    return response.status(400).json({
+      error: 'number must be unique',
+    })
+  }
+
+  const person = 
+  {
     id: generateId(),
+    name: body.name,
+    number: body.number   
   }
 
   persons = persons.concat(person)
