@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+var morgan = require('morgan')
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -33,7 +34,18 @@ let persons = [
     }
 ]
 
+
+
+
+
 app.use(express.json())
+morgan.token('body', (req) => JSON.stringify(req.body))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
+app.get('/', function (req, res) {
+  res.send('hello, world!')
+})
 
 app.get('/info', (request, response) => {
   const count = persons.length
