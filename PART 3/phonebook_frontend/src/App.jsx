@@ -21,7 +21,12 @@ useEffect(() => {
 const addPerson = (event) => {
   event.preventDefault()
   const personObject = { name: newName, number: newNumber }
-  
+
+  const ifContains = (persons, name) => {
+    return persons.some(p => p.name === personObject.name)
+  }
+
+  if (!ifContains(persons, personObject.name)) {
     personService.create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data))
@@ -38,8 +43,43 @@ const addPerson = (event) => {
         }, 5000)
       })
       .catch(error => {
-        console.error("Error adding person:", error)
+  setErrorMessage({
+    text: error.response.data.error,   
+    type: "error"
+  })
+
+  setTimeout(() => {
+    setErrorMessage(null)
+  }, 5000)
+})
+  } else {
+    if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+      const foundPerson = persons.find(p => p.name === personObject.name)
+      personService.update(foundPerson.id, personObject).then(response => {
+      setPersons(persons.map(p => 
+        p.id !== foundPerson.id ? p : response.data
+      ))
+      setNewName('')
+      setNewNumber('')
+      setErrorMessage({
+        text: `Replaced number of ${foundPerson.name}`,
+        type: "message"
       })
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }).catch(error => {
+      setErrorMessage({
+        text: error.response.data.error,   
+        type: "error"
+      })
+
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+    })
+    }
+  }
 }
 
 const deletePerson = (person) => {
