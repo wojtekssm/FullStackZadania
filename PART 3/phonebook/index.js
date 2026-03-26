@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const Person = require('./models/person')
 var morgan = require('morgan')
-const person = require('./models/person')
 
 app.use(express.static('dist'))
 
@@ -17,13 +16,14 @@ app.get('/', function (req, res) {
 })
 
 app.get('/info', (request, response) => {
-  const count = persons.length
-  const date = new Date()
+  Person.countDocuments().then(count => {
+    const date = new Date()
 
-  response.send(`
-    <p>Phonebook has info for ${count} people</p>
-    <p>${date}</p>
-  `)
+    response.send(`
+      <p>Phonebook has info for ${count} people</p>
+      <p>${date}</p>
+    `)
+  })
 })
 
 
@@ -64,13 +64,13 @@ app.post('/api/persons', (request, response, next) => {
 
   const person = new Person({
     name: body.name,
-    number: body.number   
+    number: body.number
   })
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
   }).catch(error => next(error))
-  
+
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
