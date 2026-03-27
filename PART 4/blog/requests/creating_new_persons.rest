@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+
+{
+    "title": "Final Fnatsy VII",
+    "author": "Square Enix",
+    "url": "square-enix.com/final-fantasy-vii",
+    "likes": 7777
+}
