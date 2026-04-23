@@ -23,7 +23,7 @@ const mostBlogs = (blogs) => {
     }
   })
   const maxRepeats = authors.reduce((max, u) => Math.max(max, u.repeats), 0)
-  let topAuthor = "";
+  let topAuthor = ''
   authors.forEach(author => {
     if(author.repeats == maxRepeats){
       topAuthor = author.name
@@ -43,7 +43,7 @@ const mostLikes = (blogs) =>{
     }
   })
   const maxLikes = authors.reduce((max, element) => Math.max(max, element.likes), 0)
-  let topAuthor = "";
+  let topAuthor = ''
   authors.forEach(author => {
     if(author.likes == maxLikes){
       topAuthor = author.name
