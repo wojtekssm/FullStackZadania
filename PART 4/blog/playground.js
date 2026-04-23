@@ -6,4 +6,4 @@ const blogs = [
   { author: "John", likes: 7 }
 ]
 
-listHelper.mostBlogs(blogs)
+console.log(listHelper.mostLikes(blogs))
