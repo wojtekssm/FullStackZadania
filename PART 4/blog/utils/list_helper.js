@@ -1,4 +1,4 @@
-const dummy = (blogs) => {
+const dummy = () => {
   return 1
 }
 
@@ -33,7 +33,7 @@ const mostBlogs = (blogs) => {
 }
 
 const mostLikes = (blogs) =>{
-  let = authors = []
+  let authors = []
   blogs.forEach(blog => {
     let author = authors.find(author => author.name === blog.author)
     if(author){
